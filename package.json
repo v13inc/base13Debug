@@ -1,0 +1,10 @@
+{
+  "name": "base13Debug",
+  "version": "0.1.0-alpha",
+  "description": "Debugging tools for phantomjs",
+  "author": "Sean Clark (@v13inc) <v13inc@gmail.com>",
+  "dependencies": {
+    "socket.io": ">= 0.8.0"
+  },
+  "engine": "node >= 0.7.0"
+}

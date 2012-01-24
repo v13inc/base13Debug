@@ -60,13 +60,26 @@ debugClient.connect = function() {
   })
 }
 
+debugClient.send = function(messageName, data, response) {
+  this.socket.emit('msg', {
+    message: messageName,
+    data: data,
+    response: response ? response : false 
+  });
+}
+
 debugClient.sendResponse = function(messageName, data) {
-  console.log('msg sent, name: ' + messageName + '_response, data: ' + data);
   this.socket.emit('msg', {
     message: messageName,
     data: data,
     response: true
   });
 }
+
+debugClient.log = function(message) {
+  debugClient.send('log', message);
+}
+debugClient.origLog = console.log;
+console.log = debugClient.log;
 
 debugClient.connect();
