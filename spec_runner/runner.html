@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Spec Runner</title>
+
+  <link rel="shortcut icon" type="image/png" href="../vendor/jasmine/jasmine_favicon.png">
+
+  <link rel="stylesheet" type="text/css" href="../vendor/jasmine/jasmine.css">
+  <script type="text/javascript" src="../vendor/jasmine/jasmine.js"></script>
+  <script type="text/javascript" src="ConsoleReporter.js"></script>
+  <script type="text/javascript" src="../vendor/jasmine/jasmine-html.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.2.2/underscore-min.js"></script>
+  <div pub-key="pub-ec5b29b7-c509-4761-81a8-3fb826a2ca09" sub-key="sub-6402370a-3fe3-11e1-8601-6b05aa0c1f41" ssl="off" origin="pubsub.pubnub.com" id="pubnub"></div>
+  <script src="http://cdn.pubnub.com/pubnub-3.1.min.js"></script>
+
+  <script>base13_libFilePath = 'src'</script>
+  <!-- include spec files here... -->
+  <script src="bootstrap.js"></script>
+  <script src="patch.js"></script>
+
+  <script src="src/bootstrap.js"></script>
+
+
+  <script type="text/javascript">
+    (function() {
+      var jasmineEnv = jasmine.getEnv();
+      jasmineEnv.updateInterval = 1000;
+
+      var trivialReporter = new jasmine.TrivialReporter();
+      var consoleReporter = new jasmine.ConsoleReporter(function(str){
+        console.log('%% ' + str);
+        _.each(str.split('\n'), function(line) {
+          PUBNUB.publish({
+            channel: 'jasmine-spec-runner',
+            message: {
+              from: 'browser',
+              type: 'console:log',
+              data: line 
+            }
+          });
+        });
+      });
+
+      jasmineEnv.addReporter(trivialReporter);
+      jasmineEnv.addReporter(consoleReporter);
+
+      /*
+      jasmineEnv.specFilter = function(spec) {
+        return trivialReporter.specFilter(spec);
+      };
+      */
+
+      var currentWindowOnload = window.onload;
+
+      window.onload = function() {
+        if (currentWindowOnload) {
+          currentWindowOnload();
+        }
+        execJasmine();
+      };
+
+      function execJasmine() {
+        jasmineEnv.execute();
+      }
+
+    })();
+  </script>
+
+</head>
+
+<body>
+</body>
+</html>
